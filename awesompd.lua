@@ -27,6 +27,7 @@ end
 awesompd.try_require("utf8")
 awesompd.try_require("asyncshell")
 awesompd.try_require("jamendo")
+awesompd.try_require("spotify")
 local beautiful = require('beautiful')
 local naughty = naughty
 local awful = awful
@@ -990,6 +991,7 @@ function awesompd:update_track(file)
                local next_track = 
                   self:command_read('playlist -f "%file%" | head -' .. 
                                     self.current_number + 1 .. ' | tail -1', "*line")
+               spotify.try_get_cover_async(next_track)
                jamendo.try_get_cover_async(next_track)
             end
 	 end
@@ -1107,7 +1109,7 @@ end
 -- folders. If there is no cover art either returns the default album
 -- cover.
 function awesompd:get_cover(track)
-   return jamendo.try_get_cover(track) or 
+   return spotify.try_get_cover(track) or jamendo.try_get_cover(track) or 
    self:try_get_local_cover() or self.ICONS.DEFAULT_ALBUM_COVER
 end
 
